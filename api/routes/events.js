@@ -1,5 +1,3 @@
-//We are testing out test-branch
-
 const express = require("express");
 const { default: mongoose } = require("mongoose");
 const event = require("../models/event");
