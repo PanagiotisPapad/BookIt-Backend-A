@@ -27,9 +27,14 @@ router.post("/", (req, res) => {
     const event = new Event({
         _id: new mongoose.Types.ObjectId(),
         eventTitle: req.body.eventTitle,
+        eventLocation: req.body.eventLocation,
         eventDate: req.body.eventDate,
         eventPrice: req.body.eventPrice,
-        eventLocation: req.body.eventLocation
+        imageUrl: req.body.imageUrl,
+        eventDescription: req.body.eventDescription,
+        eventCategory: req.body.eventCategory,
+        totalTickets: req.body.totalTickets,
+        ticketsSold: req.body.ticketsSold
     })
     event
         .save()

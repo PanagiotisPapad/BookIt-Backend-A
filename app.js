@@ -9,17 +9,18 @@ const cors = require("cors");
 
 const app = express();
 
+app.use(cors());
+
 // Parse items inside the app
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
 
 const eventsRoutes = require("./api/routes/events");
 
 //Setting up Mongoose
 mongoose
-    .connect("mongodb://127.0.0.1:27017/bookitData", {
+    .connect("mongodb+srv://BookIt-Panos:" + process.env.MONGO_ATLAS_PW + "@bookit.ytqmdxc.mongodb.net/BookItApp?retryWrites=true&w=majority", {
         useNewUrlParser: true
 });
 
