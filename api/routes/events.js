@@ -11,18 +11,42 @@ const Event = require("../models/event");
 router.get("/", (req, res) => {
     Event.find()
          .then(docs => {
-            console.log(docs)
-            res.status(200).json(docs)
+            console.log(docs);
+            res.status(200).json(docs);
         })
         .catch((err) => {
             console.log(err)
             res.status(500).json({
                 error: err
-            })
-        })
+            });
+        });
 });
 
-//Creating new events
+
+//Get One Event
+router.get("/:eventId", (req, res, next) => {
+    const id = req.params.eventId;
+    Event.findById(id)
+         .exec()
+         .then(doc => {
+            console.log("From database", doc);
+            if (doc) {
+                res.status(200).json(doc)
+            } else {
+                res.status(404).json({
+                    message: "Error 404 / Event not found with id " + id
+                });
+            };  
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: "Invalid event Id format Error 500"
+            });
+        });
+});
+
+//Create new event
 router.post("/", (req, res) => {
     const event = new Event({
         _id: new mongoose.Types.ObjectId(),
@@ -48,30 +72,73 @@ router.post("/", (req, res) => {
     });       
 });
 
-//Getting one event
-router.get("/:eventId", (req, res) => {
-    const eventId = req.params.eventId;
-    Event.findById(eventId)
-         .then(doc => {
-            console.log(doc);
-            res.status(200).json(doc);
-        })
-        .catch(err => console.log(err));
-        res.status(500).json({err: err});
-});
+
 
 //Update events in database
-router.patch("/:eventId", (req, res) => {
-    res.status(200).json ({
-        message: "Updated event"
+
+//format 
+/*
+[
+    {
+     "propName": "eventTitle", "value": "Το καλό εβεντ" ,
+    }
+]
+*/
+
+router.patch("/:eventId", (req, res, next) => {
+    const id = req.params.eventId;
+    const updateOps = {};
+    for(const ops of req.body){
+        updateOps[ops.propName] = ops.value;
+    }
+    Event.findOneAndUpdate({_id: id}, {$set: updateOps})
+    .exec()
+    .then(result => {
+        if (!result) {
+            console.log(result);
+            res.status(404).json({
+                message: "Event not found with id" + id
+            })
+        } else {
+            console.log(result);
+            res.status(200).json({
+                message: "Event updated succesfully!"
+            }); 
+        };
+
+    })
+    .catch(err => { 
+        console.log(err);
+        res.status(500).json({
+            err: err
+        });
     });
+    
+
 });
 
-//Delete events in database
+//Delete one event
 router.delete("/:eventId", (req, res) => {
-    res.status(200).json ({
-        message: "Deleted event"
-    });
+    const id = req.params.eventId;
+    Event.findOneAndRemove({_id: id})
+        .exec()
+        .then(result => {
+            if (!result) {
+                res.status(404).json({
+                    message: "Event not found with id" + id
+                })
+            } else {
+                res.status(200).json({
+                    message: "Event deleted succesfully!"
+                }); 
+            };
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                err: err
+            });
+        });
 });
 
 module.exports = router; 
