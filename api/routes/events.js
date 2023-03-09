@@ -10,9 +10,30 @@ const Event = require("../models/event");
 //Getting all events
 router.get("/", (req, res) => {
     Event.find()
-         .then(docs => {
-            console.log(docs);
-            res.status(200).json(docs);
+        .then(docs => {
+            const response = {
+                count: "Total amount of events uploaded is now " + docs.length,
+                events: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        eventTitle: doc.eventTitle,
+                        eventLocation: doc.eventLocation,
+                        eventDate: doc.eventDate,
+                        eventPrice: doc.eventPrice,
+                        imageUrl: doc.imageUrl,
+                        eventDescription: doc.eventDescription,
+                        eventCategory: doc.eventCategory,
+                        totalTickets: doc.totalTickets,
+                        ticketsSold: doc.ticketsSold,
+                        request: {
+                            type: "GET",
+                            description: "Get the url for this specific event",
+                            url: "http://localhost:3000/events/" +doc._id
+                        }
+                    }
+                })
+            }
+            res.status(200).json(response);
         })
         .catch((err) => {
             console.log(err)
@@ -27,8 +48,8 @@ router.get("/", (req, res) => {
 router.get("/:eventId", (req, res, next) => {
     const id = req.params.eventId;
     Event.findById(id)
-         .exec()
-         .then(doc => {
+        .exec()
+        .then(doc => {
             console.log("From database", doc);
             if (doc) {
                 res.status(200).json(doc)
@@ -36,7 +57,7 @@ router.get("/:eventId", (req, res, next) => {
                 res.status(404).json({
                     message: "Error 404 / Event not found with id " + id
                 });
-            };  
+            };
         })
         .catch(err => {
             console.log(err);
@@ -63,13 +84,13 @@ router.post("/", (req, res) => {
     event
         .save()
         .then(result => {
-        console.log(result);
-    })
+            console.log(result);
+        })
         .catch(err => console.log(err));
-    res.status(201).json({ 
-        message: "Handling POST request to /events",
+    res.status(201).json({
+        message: "Created a new event succesfully",
         createdEvent: event
-    });       
+    });
 });
 
 
@@ -88,39 +109,44 @@ router.post("/", (req, res) => {
 router.patch("/:eventId", (req, res, next) => {
     const id = req.params.eventId;
     const updateOps = {};
-    for(const ops of req.body){
+    for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
-    Event.findOneAndUpdate({_id: id}, {$set: updateOps})
-    .exec()
-    .then(result => {
-        if (!result) {
-            console.log(result);
-            res.status(404).json({
-                message: "Event not found with id" + id
-            })
-        } else {
-            console.log(result);
-            res.status(200).json({
-                message: "Event updated succesfully!"
-            }); 
-        };
+    Event.findOneAndUpdate({ _id: id }, { $set: updateOps })
+        .exec()
+        .then(result => {
+            if (!result) {
+                console.log(result);
+                res.status(404).json({
+                    message: "Event not found with id" + id
+                })
+            } else {
+                console.log(result);
+                res.status(200).json({
+                    message: "Event updated succesfully!",
+                    request: {
+                        type: "GET",
+                        description: "Get the updated event",
+                        url: "http://localhost:3000/events/" + id
+                    }
+                });
+            };
 
-    })
-    .catch(err => { 
-        console.log(err);
-        res.status(500).json({
-            err: err
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                err: err
+            });
         });
-    });
-    
+
 
 });
 
 //Delete one event
 router.delete("/:eventId", (req, res) => {
     const id = req.params.eventId;
-    Event.findOneAndRemove({_id: id})
+    Event.findOneAndRemove({ _id: id })
         .exec()
         .then(result => {
             if (!result) {
@@ -130,7 +156,7 @@ router.delete("/:eventId", (req, res) => {
             } else {
                 res.status(200).json({
                     message: "Event deleted succesfully!"
-                }); 
+                });
             };
         })
         .catch(err => {
