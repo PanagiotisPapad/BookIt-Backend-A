@@ -1,104 +1,24 @@
-//We are testing out test-branch
-
 const express = require("express");
-const { default: mongoose } = require("mongoose");
-const event = require("../models/event");
+const mongoose = require("mongoose");
 const router = express.Router();
-const Event = require("../models/event");
-
+const Event = require("../controllers/events")
 
 //Getting all events
-router.get("/", (req, res) => {
-    Event.find()
-        .then(docs => {
-            const response = {
-                count: "Total amount of events uploaded is now " + docs.length,
-                events: docs.map(doc => {
-                    return {
-                        _id: doc._id,
-                        eventTitle: doc.eventTitle,
-                        eventLocation: doc.eventLocation,
-                        eventDate: doc.eventDate,
-                        eventPrice: doc.eventPrice,
-                        imageUrl: doc.imageUrl,
-                        eventDescription: doc.eventDescription,
-                        eventCategory: doc.eventCategory,
-                        totalTickets: doc.totalTickets,
-                        ticketsSold: doc.ticketsSold,
-                        request: {
-                            type: "GET",
-                            description: "Get the url for this specific event",
-                            url: "http://localhost:3000/events/" +doc._id
-                        }
-                    }
-                })
-            }
-            res.status(200).json(response);
-        })
-        .catch((err) => {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            });
-        });
-});
-
+router.get("/", Event.getAll);
 
 //Get One Event
-router.get("/:eventId", (req, res, next) => {
-    const id = req.params.eventId;
-    Event.findById(id)
-        .exec()
-        .then(doc => {
-            console.log("From database", doc);
-            if (doc) {
-                res.status(200).json(doc)
-            } else {
-                res.status(404).json({
-                    message: "Error 404 / Event not found with id " + id
-                });
-            };
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                message: "Invalid event Id format Error 500"
-            });
-        });
-});
+router.get("/:eventId", Event.getOne);
+
+//Get By Attribute
+router.get("/", Event.getByAttribute);
 
 //Create new event
-router.post("/", (req, res) => {
-    const event = new Event({
-        _id: new mongoose.Types.ObjectId(),
-        eventTitle: req.body.eventTitle,
-        eventLocation: req.body.eventLocation,
-        eventDate: req.body.eventDate,
-        eventPrice: req.body.eventPrice,
-        imageUrl: req.body.imageUrl,
-        eventDescription: req.body.eventDescription,
-        eventCategory: req.body.eventCategory,
-        totalTickets: req.body.totalTickets,
-        ticketsSold: req.body.ticketsSold
-    })
-    event
-        .save()
-        .then(result => {
-            console.log(result);
-        })
-        .catch(err => console.log(err));
-    res.status(201).json({
-        message: "Created a new event succesfully",
-        createdEvent: event
-    });
-});
+router.post("/", Event.create);
 
-
-
-//Update events in database
-
-//format 
+//Update an event
+router.patch("/:eventId", Event.update);
 /*
+Format to update an event: 
 [
     {
      "propName": "eventTitle", "value": "Το καλό εβεντ" ,
@@ -106,65 +26,7 @@ router.post("/", (req, res) => {
 ]
 */
 
-router.patch("/:eventId", (req, res, next) => {
-    const id = req.params.eventId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Event.findOneAndUpdate({ _id: id }, { $set: updateOps })
-        .exec()
-        .then(result => {
-            if (!result) {
-                console.log(result);
-                res.status(404).json({
-                    message: "Event not found with id" + id
-                })
-            } else {
-                console.log(result);
-                res.status(200).json({
-                    message: "Event updated succesfully!",
-                    request: {
-                        type: "GET",
-                        description: "Get the updated event",
-                        url: "http://localhost:3000/events/" + id
-                    }
-                });
-            };
-
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                err: err
-            });
-        });
-
-
-});
-
-//Delete one event
-router.delete("/:eventId", (req, res) => {
-    const id = req.params.eventId;
-    Event.findOneAndRemove({ _id: id })
-        .exec()
-        .then(result => {
-            if (!result) {
-                res.status(404).json({
-                    message: "Event not found with id" + id
-                })
-            } else {
-                res.status(200).json({
-                    message: "Event deleted succesfully!"
-                });
-            };
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                err: err
-            });
-        });
-});
+//Delete an event
+router.delete("/:eventId", Event.delete);
 
 module.exports = router; 

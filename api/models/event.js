@@ -5,12 +5,12 @@ const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    
+
     eventTitle: {
         type: String,
         required: true
     },
-    
+
     eventLocation: {
         type: String,
         require: true
@@ -25,23 +25,23 @@ const eventSchema = new mongoose.Schema({
         required: true
     },
     imageUrl: {
-        type: String, 
+        type: String,
         required: true
-    }, 
+    },
     eventDescription: {
-        type: String, 
+        type: String,
         required: true
-    }, 
+    },
     eventCategory: {
-        type: String, 
+        type: String,
         required: true
-    }, 
+    },
     totalTickets: {
-        type: Number, 
+        type: Number,
         required: true
-    }, 
+    },
     ticketsSold: {
-        type: Number, 
+        type: Number,
         required: true
     }
 });
