@@ -1,7 +1,7 @@
 const Event = require("../models/event");
 const mongoose = require("mongoose");
-//Controller to get all events
 
+//Controller to get all events
 exports.getAll = (req, res) => {
     Event.find()
         .then(docs => {
@@ -60,31 +60,28 @@ exports.getOne = (req, res) => {
         });
 };
 
-//route : events?attribute=eventLocation&value=Αθήνα
-
-//Controller to get records with a specific attribute
-exports.getByAttribute = (req, res) => {
-    const attribute = req.query.attribute;
-    if (attribute) {
-        console.log(attribute)
-    } else {
-        console.log("fail fail fail")
-    };
-    const value = req.query.value;
-    console.log(value)
-    const query = {};
-    query[attribute] = value;
-
-    Event.find(query).exec((err, events) => {
-        if (err) {
-            res.status(500).send(err);
-            return;
-        }
-        res.json(events);
-    });
-};
-
-
+exports.getByCity = (req, res) => {
+    const location = req.params.eventLocation;
+    Event.find({eventLocation: location})
+        .exec()
+        .then(events => {
+            console.log(events);
+            if (events) {
+                res.status(200).json(events)
+            } else {
+                res.status(404).json({
+                    message: "Error 404 / Event not found with city name " + eventLocation
+                });
+            };
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: "Invalid event city Error 500"
+            });
+        });
+}
+ 
 //Controller to create new event
 exports.create = (req, res) => {
     const event = new Event({

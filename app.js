@@ -23,14 +23,14 @@ db.on("err", (err) => { console.log(err) });
 db.once("open", () => { console.log("Connected to Database") });
 
 //Go to the events file
-app.use("/events", eventsRoutes);
+app.use("/", eventsRoutes);
 
 //404 Error handling
 app.use((req, res, next) => {
     const err = new Error("Not found");
     err.status = 404;
     next(err);
-})
+});
 
 //500 Error handling
 app.use((err, req, res, next) => {
@@ -40,7 +40,7 @@ app.use((err, req, res, next) => {
             message: err.message
         }
     })
-})
+});
 
 //Spinning up the server
 app.listen(3000, () => {

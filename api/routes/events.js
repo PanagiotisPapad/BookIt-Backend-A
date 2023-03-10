@@ -1,22 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const Event = require("../controllers/events")
+const Event = require("../controllers/events");
+const { events } = require("../models/event");
 
 //Getting all events
-router.get("/", Event.getAll);
+router.get("/events", Event.getAll);
 
 //Get One Event
-router.get("/:eventId", Event.getOne);
+router.get("/events/:eventId", Event.getOne);
 
-//Get By Attribute
-router.get("/", Event.getByAttribute);
+//Get event by City
+router.get("/events/location/:eventLocation", Event.getByCity);
 
 //Create new event
-router.post("/", Event.create);
+router.post("/events", Event.create);
 
 //Update an event
-router.patch("/:eventId", Event.update);
+router.patch("/events/:eventId", Event.update);
+
 /*
 Format to update an event: 
 [
@@ -27,6 +29,6 @@ Format to update an event:
 */
 
 //Delete an event
-router.delete("/:eventId", Event.delete);
+router.delete("/events/:eventId", Event.delete);
 
 module.exports = router; 
