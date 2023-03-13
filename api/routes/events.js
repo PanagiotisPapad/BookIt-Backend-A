@@ -1,70 +1,34 @@
 const express = require("express");
-const { default: mongoose } = require("mongoose");
-const event = require("../models/event");
+const mongoose = require("mongoose");
 const router = express.Router();
-const Event = require("../models/event");
-
+const Event = require("../controllers/events");
+const { events } = require("../models/event");
 
 //Getting all events
-router.get("/", (req, res) => {
-    Event.find()
-         .then(docs => {
-            console.log(docs)
-            res.status(200).json(docs)
-        })
-        .catch((err) => {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        })
-});
+router.get("/events", Event.getAll);
 
-//Creating new events
-router.post("/", (req, res) => {
-    const event = new Event({
-        _id: new mongoose.Types.ObjectId(),
-        eventTitle: req.body.eventTitle,
-        eventDate: req.body.eventDate,
-        eventPrice: req.body.eventPrice,
-        eventLocation: req.body.eventLocation
-    })
-    event
-        .save()
-        .then(result => {
-        console.log(result);
-    })
-        .catch(err => console.log(err));
-    res.status(201).json({ 
-        message: "Handling POST request to /events",
-        createdEvent: event
-    });       
-});
+//Get One Event
+router.get("/events/:eventId", Event.getOne);
 
-//Getting one event
-router.get("/:eventId", (req, res) => {
-    const eventId = req.params.eventId;
-    Event.findById(eventId)
-         .then(doc => {
-            console.log(doc);
-            res.status(200).json(doc);
-        })
-        .catch(err => console.log(err));
-        res.status(500).json({err: err});
-});
+//Get event by City
+router.get("/events/location/:eventLocation", Event.getByCity);
 
-//Update events in database
-router.patch("/:eventId", (req, res) => {
-    res.status(200).json ({
-        message: "Updated event"
-    });
-});
+//Create new event
+router.post("/events", Event.create);
 
-//Delete events in database
-router.delete("/:eventId", (req, res) => {
-    res.status(200).json ({
-        message: "Deleted event"
-    });
-});
+//Update an event
+router.patch("/events/:eventId", Event.update);
+
+/*
+Format to update an event: 
+[
+    {
+     "propName": "eventTitle", "value": "Το καλό εβεντ" ,
+    }
+]
+*/
+
+//Delete an event
+router.delete("/events/:eventId", Event.delete);
 
 module.exports = router; 
