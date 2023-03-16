@@ -12,6 +12,8 @@ Link για να πάρουμε όλα τα events μιας κατηγορίας
 Κ τέλος ζητάμε ένα substring και παίρνουμε τα events που εμπεριέχουν αυτό το substring στον τίτλο (eventTitle) τους ή στο location (eventLocatiohn) τους. 
 Π.χ. https://.../events/arc.
 
+Για να δείτε τα data σε μορφή JSON μπορείτε να χρησιμοποιήσετε την εξής επέκταση του Google Chrome: JSON Viewer Pro.
+
 Το κομμάτι του URL είναι το web API και έχει αποκρυφθεί για λόγους ασφαλείας. 
 
 Backend Team A FTW!
