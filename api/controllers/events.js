@@ -88,9 +88,9 @@ exports.getOne = (req, res) => {
         });
 };
 
-exports.getByCity = (req, res) => {
-    const location = req.params.eventLocation;
-    Event.find({eventLocation: location})
+exports.getByCategory = (req, res) => {
+    const category = req.params.eventCategory;
+    Event.find({eventCategory: category})
         .exec()
         .then(events => {
             console.log(events);
@@ -98,14 +98,14 @@ exports.getByCity = (req, res) => {
                 res.status(200).json(events)
             } else {
                 res.status(404).json({
-                    message: "Error 404 / Event not found with city name " + eventLocation
+                    message: "Error 404 / Event category not found " + eventLocation
                 });
             };
         })
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                message: "Invalid event city Error 500"
+                message: "Invalid event category Error 500"
             });
         });
 }

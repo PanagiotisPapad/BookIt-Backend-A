@@ -14,7 +14,7 @@ router.get("/events/:substring", Event.getSub);
 router.get("/events/:eventId", Event.getOne);
 
 //Get event by City
-router.get("/events/location/:eventLocation", Event.getByCity);
+router.get("/events/category/:eventCategory", Event.getByCategory);
 
 //Create new event
 router.post("/events", Event.create);
