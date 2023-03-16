@@ -37,6 +37,34 @@ exports.getAll = (req, res) => {
         });
 };
 
+//Getting all events with a given substring
+exports.getSub = (async (req, res) => {
+    const { substring } = req.params;
+  
+    // Definition of pipeline aggregation 
+    const pipeline = [
+      {
+        $match: { $or:[
+          { eventLocation: { $regex: substring, $options: "i" } },
+          { eventTitle: { $regex: substring, $options: "i" } }],
+        },
+      },
+    ];
+    try {
+      // Aggregation launch and return results
+      const result = await Event.aggregate(pipeline);
+      
+      if (result.length === 0) {
+        res.status(404).send("Δεν βρέθηκαν αποτελέσματα")
+      }else {
+        res.json(result);
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Internal server error");
+    }
+  });
+
 //Controller to get one event
 exports.getOne = (req, res) => {
     const id = req.params.eventId;
