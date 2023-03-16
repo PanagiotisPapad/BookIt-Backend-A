@@ -25,11 +25,10 @@ db.once("open", () => { console.log("Connected to Database") });
 //Go to the events file
 app.use("/", eventsRoutes);
 
-//404 Error handling
 app.use((req, res, next) => {
-    const err = new Error("Not found");
-    err.status = 404;
-    next(err);
+    res.status(200).json({
+        message: "Welcome to the coolest API. Check out our ReadMe to see how it works"
+    })
 });
 
 //500 Error handling
