@@ -8,7 +8,7 @@ const { events } = require("../models/event");
 router.get("/events", Event.getAll);
 
 //Getting all events with a given substring
-router.get("/events/:substring", Event.getSub);
+router.get("/events/search/:substring", Event.getSub);
 
 //Get One Event
 router.get("/events/:eventId", Event.getOne);
