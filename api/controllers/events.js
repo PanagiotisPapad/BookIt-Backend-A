@@ -65,6 +65,7 @@ exports.getSub = (async (req, res) => {
     }
   });
 
+
 //Controller to get one event
 exports.getOne = (req, res) => {
     const id = req.params.eventId;
@@ -108,8 +109,24 @@ exports.getByCategory = (req, res) => {
                 message: "Invalid event category Error 500"
             });
         });
-}
- 
+};
+ //NEW FEATURE
+//Controller to get all distinct cities in database
+exports.getCities = async (req, res) => {
+    
+
+    const Event = mongoose.model("Event");
+
+    try{
+        const values = await Event.distinct('eventLocation');
+        const uniqueValues = [... new Set(values)]; 
+        res.send(uniqueValues);
+    }catch (err){
+        res.status(500).send(err);
+    }
+};
+
+
 //Controller to create new event
 exports.create = (req, res) => {
     const event = new Event({

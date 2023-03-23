@@ -16,6 +16,10 @@ router.get("/events/:eventId", Event.getOne);
 //Get event by City
 router.get("/events/category/:eventCategory", Event.getByCategory);
 
+//NEW FEATURE
+//Get all distinct cities in database
+router.get("/cities", Event.getCities);
+
 //Create new event
 router.post("/events", Event.create);
 
