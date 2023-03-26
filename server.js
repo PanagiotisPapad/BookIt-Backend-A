@@ -10,7 +10,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const eventsRoutes = require("./api/routes/events");
+const eventsRoutes = require("./api/routes/eventRouter");
+const usersRoutes = require("./api/routes/userRouter")
 
 //Setting up Mongoose
 mongoose
@@ -23,7 +24,10 @@ db.on("err", (err) => { console.log(err) });
 db.once("open", () => { console.log("Connected to Database") });
 
 //Go to the events file
-app.use("/", eventsRoutes);
+app.use("/e/", eventsRoutes);
+app.use("/u/", usersRoutes);
+
+
 
 app.use((req, res, next) => {
     res.status(200).json({

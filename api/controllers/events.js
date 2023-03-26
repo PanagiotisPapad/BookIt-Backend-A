@@ -1,4 +1,5 @@
 const Event = require("../models/event");
+
 const mongoose = require("mongoose");
 
 //Controller to get all events
@@ -106,7 +107,7 @@ exports.getByCategory = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                message: "Invalid event category Error 500"
+                message: "Invalid event category - Error 500"
             });
         });
 };
@@ -212,3 +213,4 @@ exports.delete = (req, res) => {
             });
         });
 };
+
