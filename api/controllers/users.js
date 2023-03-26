@@ -59,7 +59,7 @@ exports.createUser = async (req,res) => {
     }
 };
 
-//Controller to get one user
+//Controller to get one user - find by id
 exports.getOneUser = (req, res) => {
     const id = req.params.userId;
 
@@ -82,3 +82,66 @@ exports.getOneUser = (req, res) => {
             });
         });
 };
+
+//Controller to get one user - find by username
+exports.getOneUserByUsername = async (req, res) => {
+        const username = req.params.username;
+      
+        try {
+          const user = await User.findOne({ username: { $regex: username } });
+      
+          if (!user) {
+            return res.status(404).send("No user exists with the given username");
+          }
+          res.send(user);
+        } catch (err) {
+          console.log(err);
+          res.status(500).send("Server error");
+        };
+};
+
+
+//Controller to get one user by username and return his orderHistory array
+exports.getOneUserByUsernameAndReturnOrderHistory = async (req, res) => {
+    const username = req.params.username;
+  
+    try {
+      const user = await User.findOne({ username: { $regex: username } });
+  
+      if (!user) {
+        return res.status(404).send("No user exists with the given username");
+      }
+
+      const aSpecificOrderHistory = user.orderHistory;
+      
+      //returning the orderHistory Array of the found user
+      res.send(aSpecificOrderHistory);
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Server error");
+    };
+};
+
+//Controller to get one user by id and return his orderHistory array
+exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {
+    
+    const userId = req.params.userId;
+
+    try {
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).send("No user exists with the given id");
+      }
+      const aSpecificOrderHistory = user.orderHistory;
+
+     //returning the orderHistory Array of the found user
+     res.send(aSpecificOrderHistory);
+
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Server error');
+    }
+  };
