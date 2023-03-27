@@ -26,5 +26,7 @@ userRouter.get("/user/orderhistoryById/:userId", User.getOneUserByIdAndReturnOrd
 
 userRouter.patch("/user/addordertohistory/:userId/eventId", User.addOrderToHistory)
 
+userRouter.delete("/user/delete/:userId",User.deleteUser )
+
 
 module.exports = userRouter; 

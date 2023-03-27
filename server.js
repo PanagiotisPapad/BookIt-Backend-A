@@ -24,8 +24,8 @@ db.on("err", (err) => { console.log(err) });
 db.once("open", () => { console.log("Connected to Database") });
 
 //Go to the events file
-app.use("/e/", eventsRoutes);
-app.use("/u/", usersRoutes);
+app.use("/", eventsRoutes);
+app.use("/", usersRoutes);
 
 
 

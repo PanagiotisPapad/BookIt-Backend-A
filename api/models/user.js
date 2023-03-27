@@ -11,13 +11,19 @@ const userSchema = new mongoose.Schema({
 
     password: {
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
 
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     },
+
     orderHistory: {
         type: Array,
         default:[],
