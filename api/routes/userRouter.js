@@ -24,4 +24,7 @@ userRouter.get("/user/orderhistoryById/:userId", User.getOneUserByIdAndReturnOrd
 
 //TODO : Add a post endpoint to add an event to a user's order history 
 
+userRouter.patch("/user/addordertohistory/:userId/eventId", User.addOrderToHistory)
+
+
 module.exports = userRouter; 

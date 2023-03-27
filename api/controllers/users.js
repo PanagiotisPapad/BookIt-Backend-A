@@ -1,5 +1,6 @@
 
 const User = require("../models/user");
+const Event = require ("../models/event");
 const mongoose = require("mongoose");
 
 //Controller to create a new User
@@ -7,7 +8,7 @@ const mongoose = require("mongoose");
 
 exports.createUser = async (req,res) => {
 
-    var errorStatusCode = 0;
+  
     try {
         console.log('Checking if item already exists');
         const existingItem = await User.findOne({
@@ -142,6 +143,33 @@ exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {
 
     } catch (err) {
       console.log(err);
-      res.status(500).send('Server error');
+      res.status(500).send("Server error");
+    }
+  };
+
+  exports.addOrderToHistory = async (req, res) => {
+    const { userId, eventId } = req.params;
+  
+    try {
+      // Find the user by id
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      // Find the event by id
+      const event = await Event.findById(eventId);
+      if (!event) {
+        return res.status(404).send("Event not found");
+      }
+  
+      // Add the event to the user's events array
+      user.orderHistory.push(eventId);
+      await user.save();
+  
+      res.send("User " + user.username + "'s orderHistory list updated with event: "  + event.eventTitle);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Server error");
     }
   };
