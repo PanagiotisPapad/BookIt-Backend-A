@@ -10,6 +10,9 @@ const { users } = require("../models/user");
 //Registration of a new user
 userRouter.post("/user", User.createUser);
 
+//Login
+userRouter.post("/login", User.login);
+
 //Find and return a user that already exists based on his id
 userRouter.get("/user/:userId", User.getOneUser)
 
