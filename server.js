@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+
 const app = express();
 
 app.use(cors());
@@ -26,8 +27,6 @@ db.once("open", () => { console.log("Connected to Database") });
 //Go to the events file
 app.use("/", eventsRoutes);
 app.use("/", usersRoutes);
-
-
 
 app.use((req, res, next) => {
     res.status(200).json({

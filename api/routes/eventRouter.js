@@ -2,11 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const eventsRouter = express.Router();
 const Event = require("../controllers/events");
+const checkAuth = require("../middleware/check-auth");
 
 const { events } = require("../models/event");
 
 //Getting all events
-eventsRouter.get("/events", Event.getAll);
+eventsRouter.get("/events",  Event.getAll);
 
 //Getting all events with a given substring
 eventsRouter.get("/events/search/:substring", Event.getSub);
@@ -22,7 +23,7 @@ eventsRouter.get("/events/category/:eventCategory", Event.getByCategory);
 eventsRouter.get("/cities", Event.getCities);
 
 //Create new event
-eventsRouter.post("/events", Event.create);
+eventsRouter.post("/events", checkAuth, Event.create);
 
 //Update an event
 eventsRouter.patch("/events/:eventId", Event.update);

@@ -2,13 +2,16 @@ const User = require("../models/user");
 const Event = require("../models/event");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt"); //library for encrypting the user password information
+const jwt = require("jsonwebtoken");
+//const checkAuth = require("../middleware/check-auth");
 
 
 //Registration requires that no user already exists with same email
 
 //Controller to create a new User
 exports.createUser = (req, res) => {
-  //check if email already exists in the database
+
+  //Check if email already exists in the database
   User.find({ email: req.body.email })
     .exec()
     .then(user => {
@@ -63,8 +66,53 @@ exports.deleteUser = (req, res) => {
     .catch(err => {
       console.log(err)
       res.status(500).json({
-        error: err.message
+        err: err.message
       })
+    })
+}
+
+//Controller for the login function
+exports.login = (req, res, next) => {
+  User.find({ email: req.body.email })
+    .exec()
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          message: "Auth failed"
+        });
+      }
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+        if (result) {
+          const token = jwt.sign({
+            email: user[0].email,
+            userId: user[0]._id
+          },
+            process.env.JWT_KEY,
+            {
+              expiresIn: "1h" 
+            }
+          );
+          return res.status(200).json({
+            message: "Auth successful",
+            token: token
+          })
+        }
+        //password is wrong -> result == false
+        res.status(401).json({
+          message: "Auth failed"
+        });
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        message: "Invalid user Id format - Error 500"
+      });
     })
 }
 
@@ -90,7 +138,7 @@ exports.getOneUser = (req, res) => {
         message: "Invalid user Id format - Error 500"
       });
     });
-};
+}; 
 
 //Controller to get one user - find by username
 exports.getOneUserByUsername = async (req, res) => {
@@ -133,7 +181,7 @@ exports.getOneUserByUsernameAndReturnOrderHistory = async (req, res) => {
 };
 
 //Controller to get one user by id and return his orderHistory array
-exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {
+exports.getOneUserByIdAndReturnOrderHistory =  async (req, res) => {
 
   const userId = req.params.userId;
 
