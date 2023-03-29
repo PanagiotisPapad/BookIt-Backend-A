@@ -85,9 +85,11 @@ exports.login = (req, res, next) => {
           });
         }
         if (result) {
-
+          const {username, _id} = user[0];
           return res.status(200).json({
-            message: "Auth successful"
+            username: username, //Send username in the response   
+            id: _id,            //Send id in the response
+            message: "Auth successfull"
           })
         }
         //password is wrong -> result == false
