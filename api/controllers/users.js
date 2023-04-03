@@ -130,45 +130,25 @@ exports.getOneUser = (req, res) => {
     });
 };
 
-//Controller to get one user - find by username
-exports.getOneUserByUsername = async (req, res) => {
-  const username = req.params.username;
-
+exports.getOneUserByEmail = async (req, res) => {
   try {
-    const user = await User.findOne({ username: { $regex: username } });
+    const email = req.params.email.replace(/%40/g, "@")
+    const user = await User.findOne({email});
 
-    if (!user) {
-      return res.status(404).send("No user exists with the given username");
+    if (user) {
+      res.json(user)
+    } else {
+      res.status(404).json({
+        message: "User not found with given mail or password"
+      })
     }
-    res.send(user);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Server error");
-  };
-};
-
-
-//Controller to get one user by username and return his orderHistory array
-exports.getOneUserByUsernameAndReturnOrderHistory = async (req, res) => {
-  const username = req.params.username;
-
-  try {
-    const user = await User.findOne({ username: { $regex: username } });
-
-    if (!user) {
-      return res.status(404).send("No user exists with the given username");
-    }
-
-    const aSpecificOrderHistory = user.orderHistory;
-
-    //returning the orderHistory Array of the found user
-    res.send(aSpecificOrderHistory);
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Server error");
-  };
-};
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error status 500"
+    })
+  }
+}
 
 //Controller to get one user by id and return his orderHistory array
 exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {

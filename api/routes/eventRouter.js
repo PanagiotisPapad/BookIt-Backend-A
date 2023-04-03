@@ -17,9 +17,16 @@ eventsRouter.get("/events/:eventId", Event.getOne);
 //Get event by City
 eventsRouter.get("/events/category/:eventCategory", Event.getByCategory);
 
-//NEW FEATURE
+//AUTOCOMPLETE SEARCHBAR - CITIES
 //Get all distinct cities in database
 eventsRouter.get("/cities", Event.getCities);
+
+//CALENDAR
+//Receive int:year and int:month and return all the events in that year,month
+eventsRouter.get("/events/calendarmonth/:year/:month", Event.getCalendarMonth)
+
+//Receive int:year, int:month and int:day return all the events in that year,month,day
+eventsRouter.get("/events/calendarday/:year/:month/:day", Event.getCalendarDay)
 
 //Create new event
 eventsRouter.post("/events", Event.create);

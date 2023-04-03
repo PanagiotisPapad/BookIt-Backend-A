@@ -16,6 +16,9 @@ userRouter.post("/login", User.login);
 //Find and return a user that already exists based on his id
 userRouter.get("/user/:userId", User.getOneUser)
 
+//Find and return a user that already exists based on his email
+userRouter.get("/user/email/:email", User.getOneUserByEmail)
+
 //Find a user with a specific username and return his orderHistory list
 userRouter.get("/user/orderhistoryById/:userId", User.getOneUserByIdAndReturnOrderHistory)
 
@@ -24,6 +27,7 @@ userRouter.patch("/user/addordertohistory/:userId/:eventId", User.addOrderToHist
 
 //Delete a user's profile
 userRouter.delete("/user/delete/:userId",User.deleteUser )
+
 
 
 module.exports = userRouter; 

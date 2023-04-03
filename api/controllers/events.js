@@ -111,7 +111,7 @@ exports.getByCategory = (req, res) => {
             });
         });
 };
- //NEW FEATURE
+
 //Controller to get all distinct cities in database
 exports.getCities = async (req, res) => {
     
@@ -126,6 +126,56 @@ exports.getCities = async (req, res) => {
         res.status(500).send(err);
     }
 };
+
+//Receive int:year and int:month and return all the events in that year,month
+exports.getCalendarMonth = async (req, res) => {
+
+    try {
+        const month = parseInt(req.params.month); 
+        const year = parseInt(req.params.year);
+
+        const events = await Event.find({
+            $expr: {
+                $and:[
+                    { $eq: [{$month: "$eventDate"}, month]}, 
+                    { $eq: [{$year: "$eventDate" }, year]}
+                ]
+            }
+        });
+
+        res.json(events);
+
+    }catch(err){
+        console.log(err);
+        res.status(500).send("Server error");
+    }
+};
+
+//Receive int:year, int:month and int:day return all the events in that year,month,day
+exports.getCalendarDay = async (req, res) => {
+
+    try {
+        const month = parseInt(req.params.month); 
+        const year = parseInt(req.params.year);
+        const day = parseInt(req.params.day);
+
+        const events = await Event.find({
+            eventDate: {
+                 $gte: new Date(year, month -1, day),
+                $lt: new Date(year, month -1, day +1 ) 
+              }
+            
+        });
+
+        res.json(events);
+        console.log(year, month -1, day +1)
+
+    }catch(err){
+        console.log(err);
+        res.status(500).send("Server error");
+    }
+};
+
 
 
 //Controller to create new event
