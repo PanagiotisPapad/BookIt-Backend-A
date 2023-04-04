@@ -28,6 +28,9 @@ eventsRouter.get("/events/calendarmonth/:year/:month", Event.getCalendarMonth)
 //Receive int:year, int:month and int:day return all the events in that year,month,day
 eventsRouter.get("/events/calendarday/:year/:month/:day", Event.getCalendarDay)
 
+//Find X number of events and return them for carousel view
+eventsRouter.get("/events/carousel/:x", Event.getCarouselEvents)
+
 //Create new event
 eventsRouter.post("/events", Event.create);
 

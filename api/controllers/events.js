@@ -176,6 +176,29 @@ exports.getCalendarDay = async (req, res) => {
     }
 };
 
+//Find X number of events and return them for carousel view
+exports.getCarouselEvents = async (req, res) => {
+    try {
+      const x = parseInt(req.params.x);
+  
+      const events = await Event.aggregate([
+        {
+          $addFields: {
+            ticketsDiff: { $subtract: ['$totalTickets', '$ticketsSold'] }
+          }
+        },
+        { $sort: {ticketsDiff: 1 } },
+        { $limit: x }, 
+        { $unset: "ticketsDiff" } // remove the ticketsDiff field from the result
+      ]);
+  
+      res.json(events);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Server error');
+    }
+
+};
 
 
 //Controller to create new event
