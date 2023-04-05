@@ -27,8 +27,7 @@ db.once("open", () => { console.log("Connected to Database") });
 app.use("/", eventsRoutes);
 app.use("/", usersRoutes);
 
-
-
+//200 status 
 app.use((req, res, next) => {
     res.status(200).json({
         message: "Welcome to the coolest API. Check out our ReadMe to see how it works"

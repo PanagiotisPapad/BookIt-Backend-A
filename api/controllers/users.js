@@ -29,7 +29,8 @@ exports.createUser = (req, res) => {
               _id: new mongoose.Types.ObjectId(),
               username: req.body.username,
               email: req.body.email,
-              password: hash
+              password: hash,
+              userState: req.body.userState
             })
             user
               .save()

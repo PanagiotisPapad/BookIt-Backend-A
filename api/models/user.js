@@ -28,7 +28,14 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default:[],
         required: true
+    }, 
+    
+    userState: {
+        type: String, 
+        default: "user",
+        //For administrators set "userState": "admin" 
+        required: true
     }
 });
-
+ 
 module.exports = mongoose.model("User", userSchema, "UsersCollection");
