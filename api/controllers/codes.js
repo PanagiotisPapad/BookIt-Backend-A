@@ -26,8 +26,8 @@ exports.createCode = (req, res) => {
 //Receive a specific code in parameter and return the discount percentage number
 exports.getDiscountByCode = async (req, res) => {
     try {
-      const codeName = req.params.codeName;
-      const code = await Code.findOne(codeName);
+      const codeName = req.params.code;
+      const code = await Code.findOne({codeName: codeName});
   
       if (code) {
         res.json(code.discountPercentage)
