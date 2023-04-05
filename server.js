@@ -48,3 +48,10 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
     console.log("Server started on port 3000");
 });
+
+ // Create a TTL index on the "Events" collection that deletes events after eventDate is passed
+ db.collection("EventsCollection").createIndex({ "eventDate": 1 }, { expireAfterSeconds: 0 }, function(err, result) {
+    if (err) throw err;
+    console.log("TTL index created on 'expiryDate' attribute in 'mycollection' collection");
+    
+  });
