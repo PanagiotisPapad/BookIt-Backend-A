@@ -150,7 +150,7 @@ exports.getOneUserByEmail = async (req, res) => {
       message: "Internal server error status 500"
     })
   }
-}
+};
 
 //Controller to get one user by id and return his orderHistory array
 exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {

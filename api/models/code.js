@@ -9,6 +9,11 @@ const codeSchema = new mongoose.Schema({
         required: true
     }, 
 
+    discountPercentage: {
+        type: Number, 
+        required: true
+    },
+
     codeStartingDate: {
         type: Date, 
         required: true
@@ -18,3 +23,5 @@ const codeSchema = new mongoose.Schema({
         required: true
     }
 })
+
+module.exports = mongoose.model("Code", codeSchema, "CodesCollection");

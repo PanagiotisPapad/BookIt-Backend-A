@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const eventsRoutes = require("./api/routes/eventRouter");
-const usersRoutes = require("./api/routes/userRouter")
+const usersRoutes = require("./api/routes/userRouter");
+const codesRouter = require("./api/routes/codeRouter");
 
 //Setting up Mongoose
 mongoose
@@ -26,6 +27,7 @@ db.once("open", () => { console.log("Connected to Database") });
 //Go to the events file
 app.use("/", eventsRoutes);
 app.use("/", usersRoutes);
+app.use("/", codesRouter);
 
 //200 status 
 app.use((req, res, next) => {
@@ -49,9 +51,17 @@ app.listen(3000, () => {
     console.log("Server started on port 3000");
 });
 
+//TTL's: (TTL: Time To Live) - a mongoDB feature for collections to automatically delele their items after a specific date is passed
  // Create a TTL index on the "Events" collection that deletes events after eventDate is passed
  db.collection("EventsCollection").createIndex({ "eventDate": 1 }, { expireAfterSeconds: 0 }, function(err, result) {
     if (err) throw err;
-    console.log("TTL index created on 'expiryDate' attribute in 'mycollection' collection");
+    console.log("TTL index created on 'expiryDate' attribute in 'EventsCollection' collection");
+    
+  });
+
+  // Create a TTL index on the "Codes" collection that deletes events after eventDate is passed
+ db.collection("CodesCollection").createIndex({ "codeExpireDate": 1 }, { expireAfterSeconds: 0 }, function(err, result) {
+    if (err) throw err;
+    console.log("TTL index created on 'codeExpireDate' attribute in 'CodesCollection' collection");
     
   });
