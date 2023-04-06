@@ -47,7 +47,9 @@ exports.getSub = (async (req, res) => {
       {
         $match: { $or:[
           { eventLocation: { $regex: substring, $options: "i" } },
-          { eventTitle: { $regex: substring, $options: "i" } }],
+          { eventTitle: { $regex: substring, $options: "i"  } }],
+         // { eventLocation: { $regex: substring, $options: "i", $collation: { locale: "el", strength: 2 } } },
+        //{ eventTitle: { $regex: substring, $options: "i" , $collation: { locale: "el", strength: 2 } } }],
         },
       },
     ];

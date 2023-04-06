@@ -86,13 +86,8 @@ exports.login = (req, res, next) => {
           });
         }
         if (result) {
-          const {username, _id, userState} = user[0];
-          return res.status(200).json({
-            username: username, //Send username in the response   
-            id: _id,            //Send id in the response
-            message: "Auth successfull", 
-            userState: userState
-          })
+          const oneUser = user[0];
+          return res.status(200).json(oneUser)
         }
         //password is wrong -> result == false
         res.status(401).json({
