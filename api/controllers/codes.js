@@ -30,7 +30,7 @@ exports.getDiscountByCode = async (req, res) => {
       const code = await Code.findOne({codeName: codeName});
   
       if (code) {
-        res.json(code.discountPercentage)
+        res.send(code.discountPercentage.toString());
       } else {
         res.status(404).json({
           message: "The coupon you entered is not valid"
