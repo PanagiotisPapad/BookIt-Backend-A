@@ -34,8 +34,11 @@ eventsRouter.get("/events/carousel/:x", Event.getCarouselEvents)
 //Create new event
 eventsRouter.post("/events", Event.create);
 
-//Update an event
+//Update one or more specific fields/attributes of an event
 eventsRouter.patch("/events/:eventId", Event.update);
+
+//Find an event by id and Update an entire event by replacing it with another event in parameters
+eventsRouter.put("/events/update/:eventId", Event.adminUpdate);
 
 /*
 Format to update an event: 

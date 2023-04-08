@@ -265,6 +265,27 @@ exports.update = (req, res) => {
         });
 };
 
+//Controller to update an entire event by Id
+exports.adminUpdate = async (req, res) => {
+
+    const eventId = req.params.eventId;
+    const newUpdatedEvent = req.body;
+
+    try{
+        const updatedEvent = await Event.findByIdAndUpdate(eventId, newUpdatedEvent, {new: true});
+        if (!updatedEvent) {
+            // If no event was found with the specified _id, return a 404 error response
+            return res.status(404).send('Event not found');
+          }
+        console.log("Event updated: ", updatedEvent);
+        res.status(200).send(updatedEvent);
+    } catch (err) {
+        console.error('Error updating event:', err);
+        res.status(500).send('Error updating event');
+      }
+    
+};
+
 //Controller to delete an event
 exports.delete = (req, res) => {
     const id = req.params.eventId;
