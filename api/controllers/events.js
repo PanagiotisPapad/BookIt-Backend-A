@@ -221,12 +221,13 @@ exports.create = (req, res) => {
         .save()
         .then(result => {
             console.log(result);
+            res.status(201).json({
+                message: "Created a new event successfully",
+                createdEvent: event
+            });
         })
         .catch(err => console.log(err));
-    res.status(201).json({
-        message: "Created a new event successfully",
-        createdEvent: event
-    });
+    
 };
 
 //Controller to Update an event
