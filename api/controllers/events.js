@@ -221,10 +221,7 @@ exports.create = (req, res) => {
         .save()
         .then(result => {
             console.log(result);
-            res.status(201).json({
-                message: "Created a new event successfully",
-                createdEvent: event
-            });
+            res.status(201).json(event);
         })
         .catch(err => console.log(err));
     
