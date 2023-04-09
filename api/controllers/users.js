@@ -106,7 +106,7 @@ exports.login = (req, res, next) => {
 //Controller to change a user's password to a new one, after verification with old password
 exports.updatePassword = (req, res, next) => {
   const userId = req.params.userId;
-  
+
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
 
@@ -314,6 +314,33 @@ exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {
   }
 };
 
+// exports.addOrderToHistory = async (req, res) => {
+//   const { userId, eventId } = req.params;
+
+//   try {
+//     // Find the user by id
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).send("User not found");
+//     }
+
+//     // Find the event by id
+//     const event = await Event.findById(eventId);
+//     if (!event) {
+//       return res.status(404).send("Event not found");
+//     }
+
+//     // Add the event to the user's events array
+//     user.orderHistory.push(eventId);
+//     await user.save();
+
+//     res.send("User " + user.username + "'s orderHistory list updated with event: " + event.eventTitle);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send("Server error");
+//   }
+// };
+
 exports.addOrderToHistory = async (req, res) => {
   const { userId, eventId } = req.params;
 
@@ -331,7 +358,7 @@ exports.addOrderToHistory = async (req, res) => {
     }
 
     // Add the event to the user's events array
-    user.orderHistory.push(eventId);
+    user.orderHistory.push(event);
     await user.save();
 
     res.send("User " + user.username + "'s orderHistory list updated with event: " + event.eventTitle);
