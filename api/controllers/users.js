@@ -184,7 +184,7 @@ exports.userUpdate = async (req,res) => {
 
 };
 
-//Controller to update a user's username and mail, if they are not used by other user
+
 //Controller to update a user's username and mail, if they are not used by other user
 exports.userUpdateUsernameMail = async (req, res) => {
   const userId = req.params.userId;
@@ -314,9 +314,10 @@ exports.getOneUserByIdAndReturnOrderHistory = async (req, res) => {
   }
 };
 
+//Finding a user with user id, finding an event with event id and saves the event id string 
+//inside orderHistory array of user item. Not working along with frontend, code to dump
 // exports.addOrderToHistory = async (req, res) => {
 //   const { userId, eventId } = req.params;
-
 //   try {
 //     // Find the user by id
 //     const user = await User.findById(userId);

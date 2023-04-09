@@ -14,7 +14,7 @@ userRouter.post("/user", User.createUser);
 userRouter.post("/login", User.login);
 
 //Find a user by id and update his password, only if given old password matches with the encrypted one in database
-userRouter.post("user/updatepassword/:userId", User.updatePassword);
+userRouter.post("/user/updatepassword/:userId", User.updatePassword);
 
 //Find a user by id and Update the entire user by replacing it with another user in request body
 userRouter.put("/user/update/:userId", User.userUpdate);
