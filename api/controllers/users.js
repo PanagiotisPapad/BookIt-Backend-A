@@ -127,15 +127,29 @@ exports.userUpdate = async (req,res) => {
 };
 
 //Controller to update a user's username and mail, if they are not used by other user
+//Controller to update a user's username and mail, if they are not used by other user
 exports.userUpdateUsernameMail = async (req, res) => {
   const userId = req.params.userId;
-  const { username, email } = req.body;
+  const body = req.body;
 
   try {
     const user = await User.findById(userId);
     if (!user) {
       //if no user was found with the specified_id, return a 404 error response
       return res.status(404).send("User not found");
+    }
+
+    let email = user.email;
+    let username = user.username;
+
+    for(let i = 0; i < body.length; i++) {
+      const item = body[i];
+      if(item.propName === 'username') {
+        username = item.value;
+      }
+      else if(item.propName === 'email') {
+        email = item.value;
+      }
     }
 
     if (user.email === email) {
@@ -172,6 +186,7 @@ exports.userUpdateUsernameMail = async (req, res) => {
     res.status(500).send("Error updating user");
   }
 };
+
 
 
 //Controller to get one user - find by id
