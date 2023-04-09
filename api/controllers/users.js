@@ -119,12 +119,60 @@ exports.userUpdate = async (req,res) => {
     res.status(200).send(updatedUser);
 
   }catch(err){
-    
+
     console.error("Error updating user: " , err);
     res.status(500).send("Error updating user");
   }
 
 };
+
+//Controller to update a user's username and mail, if they are not used by other user
+exports.userUpdateUsernameMail = async (req, res) => {
+  const userId = req.params.userId;
+  const { username, email } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      //if no user was found with the specified_id, return a 404 error response
+      return res.status(404).send("User not found");
+    }
+
+    if (user.email === email) {
+      if (user.id === userId || user.username === username) {
+        // email already matches, update if userId is the same or username is different
+        if (user.username !== username) {
+          user.username = username;
+        }
+        user.email = email;
+        const updatedUser = await user.save();
+        console.log("User updated: ", updatedUser);
+        return res.status(200).send(updatedUser);
+      } else {
+        // email already matches, but username is different and userId is different
+        console.log("Email already in use: ", user);
+        return res.status(409).send("Email already in use");
+      }
+    }
+
+    const existingUserWithEmail = await User.findOne({ email });
+    if (existingUserWithEmail && existingUserWithEmail.id !== userId) {
+      // email is already in use by another user, return a 409 error response
+      console.log("Email already in use: ", existingUserWithEmail);
+      return res.status(409).send("Email already in use");
+    }
+
+    user.username = username;
+    user.email = email;
+    const updatedUser = await user.save();
+    console.log("User updated: ", updatedUser);
+    res.status(200).send(updatedUser);
+  } catch (err) {
+    console.error("Error updating user: ", err);
+    res.status(500).send("Error updating user");
+  }
+};
+
 
 //Controller to get one user - find by id
 exports.getOneUser = (req, res) => {

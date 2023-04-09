@@ -14,7 +14,9 @@ userRouter.post("/user", User.createUser);
 userRouter.post("/login", User.login);
 
 //Find a user by id and Update the entire user  by replacing it with another user in request body
-eventsRouter.put("/user/update/:userId", User.userUpdate);
+userRouter.put("/user/update/:userId", User.userUpdate);
+
+userRouter.patch("/user/updatenamemail/:userId",User.userUpdateUsernameMail);
 
 //Find and return a user that already exists based on his id
 userRouter.get("/user/:userId", User.getOneUser)
