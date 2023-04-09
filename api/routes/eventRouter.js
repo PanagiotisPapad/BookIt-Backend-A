@@ -37,7 +37,7 @@ eventsRouter.post("/events", Event.create);
 //Update one or more specific fields/attributes of an event
 eventsRouter.patch("/events/:eventId", Event.update);
 
-//Find an event by id and Update an entire event by replacing it with another event in parameters
+//Find an event by id and Update an entire event by replacing it with another event in request body
 eventsRouter.put("/events/update/:eventId", Event.adminUpdate);
 
 /*

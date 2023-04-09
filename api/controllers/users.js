@@ -103,6 +103,29 @@ exports.login = (req, res, next) => {
     })
 }
 
+//Controller to update an entire user by Id
+exports.userUpdate = async (req,res) => {
+
+  const userId = req.params.userId;
+  const newUpdatedUser = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId,newUpdatedUser, {new:true});
+    if(!updatedUser){
+      //if no user was found with the specified_id, return a 404 error response
+      return res.status(404).send("User not found");
+    }
+    console.log("User updated: " , updatedUser);
+    res.status(200).send(updatedUser);
+
+  }catch(err){
+    
+    console.error("Error updating user: " , err);
+    res.status(500).send("Error updating user");
+  }
+
+};
+
 //Controller to get one user - find by id
 exports.getOneUser = (req, res) => {
   const id = req.params.userId;
@@ -196,3 +219,4 @@ exports.addOrderToHistory = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+

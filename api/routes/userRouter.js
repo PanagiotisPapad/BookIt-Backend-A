@@ -13,6 +13,9 @@ userRouter.post("/user", User.createUser);
 //Login
 userRouter.post("/login", User.login);
 
+//Find a user by id and Update the entire user  by replacing it with another user in request body
+eventsRouter.put("/user/update/:userId", User.userUpdate);
+
 //Find and return a user that already exists based on his id
 userRouter.get("/user/:userId", User.getOneUser)
 
@@ -27,5 +30,7 @@ userRouter.patch("/user/addordertohistory/:userId/:eventId", User.addOrderToHist
 
 //Delete a user's profile
 userRouter.delete("/user/delete/:userId", User.deleteUser)
+
+
 
 module.exports = userRouter; 
