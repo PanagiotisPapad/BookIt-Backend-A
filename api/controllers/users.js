@@ -101,7 +101,65 @@ exports.login = (req, res, next) => {
         message: "Invalid user Id format - Error 500"
       });
     })
-}
+};
+
+//Controller to change a user's password to a new one, after verification with old password
+exports.updatePassword = (req, res, next) => {
+  const userId = req.params.userId;
+  
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+
+  User.findById(userId)
+    .exec()
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found"
+        });
+      }
+      bcrypt.compare(oldPassword, user.password, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+        if (result) {
+          bcrypt.hash(newPassword, 10, (err, hash) => {
+            if (err) {
+              return res.status(500).json({
+                error: err
+              });
+            } else {
+              user.password = hash;
+              user.save()
+                .then(result => {
+                  res.status(200).json({
+                    message: "Password updated successfully"
+                  });
+                })
+                .catch(err => {
+                  res.status(500).json({
+                    error: err
+                  });
+                });
+            }
+          });
+        } else {
+          res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+};
+
 
 //Controller to update an entire user by Id
 exports.userUpdate = async (req,res) => {
